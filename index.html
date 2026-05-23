@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arjun Singh — Frontend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080808;
+  --bg2:#111;
+  --bg3:#1a1a1a;
+  --fg:#f0ece3;
+  --fg2:#a09a8e;
+  --fg3:#5a5450;
+  --accent:#e8d5a3;
+  --accent2:#c4a96a;
+  --border:#222;
+  --green:#3dba7e;
+  --mono:'DM Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden;cursor:none}
+
+.cursor{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,width 0.2s,height 0.2s;mix-blend-mode:difference}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid var(--accent);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform 0.15s ease,width 0.3s,height 0.3s,opacity 0.3s;mix-blend-mode:difference;opacity:0.5}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.5rem 4rem;border-bottom:1px solid transparent;transition:all 0.4s;backdrop-filter:blur(0)}
+nav.scrolled{border-color:var(--border);backdrop-filter:blur(20px);background:rgba(8,8,8,0.85)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.08em;color:var(--accent);text-decoration:none}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{color:var(--fg2);text-decoration:none;font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.2s;font-weight:400}
+.nav-links a:hover{color:var(--fg)}
+
+section{padding:7rem 4rem}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:5rem;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 70% 40%,rgba(196,169,106,0.06) 0%,transparent 70%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:80px 80px;opacity:0.4;pointer-events:none}
+.hero-eyebrow{font-family:var(--mono);font-size:0.75rem;color:var(--green);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.8s 0.2s forwards}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,14vw,13rem);line-height:0.9;letter-spacing:0.02em;opacity:0;animation:fadeUp 0.8s 0.4s forwards}
+.hero-name span{color:var(--accent2)}
+.hero-sub{font-size:clamp(1rem,2vw,1.25rem);color:var(--fg2);max-width:480px;margin-top:2rem;font-weight:300;line-height:1.7;opacity:0;animation:fadeUp 0.8s 0.6s forwards}
+.hero-cta{display:flex;gap:1rem;margin-top:3rem;opacity:0;animation:fadeUp 0.8s 0.8s forwards;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.85rem 2rem;font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;font-weight:500;transition:all 0.25s;font-family:'DM Sans',sans-serif}
+.btn-primary{background:var(--accent);color:#080808}
+.btn-primary:hover{background:var(--fg);transform:translateY(-2px)}
+.btn-outline{border:1px solid var(--border);color:var(--fg2)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.hero-scroll{position:absolute;bottom:2.5rem;right:4rem;display:flex;flex-direction:column;align-items:center;gap:0.75rem;opacity:0;animation:fadeUp 0.8s 1.2s forwards}
+.hero-scroll span{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--fg3);writing-mode:vertical-rl}
+.scroll-line{width:1px;height:60px;background:linear-gradient(to bottom,var(--accent2),transparent);animation:scrollPulse 2s infinite}
+
+.section-label{font-family:var(--mono);font-size:0.7rem;color:var(--fg3);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:1rem}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,4rem);letter-spacing:0.03em;line-height:1}
+
+.about{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
+.about-text p{color:var(--fg2);font-size:1rem;line-height:1.8;margin-bottom:1.2rem}
+.about-text p strong{color:var(--fg);font-weight:500}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border)}
+.stat{background:var(--bg);padding:2rem;display:flex;flex-direction:column;gap:0.25rem}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--accent);line-height:1}
+.stat-label{font-family:var(--mono);font-size:0.7rem;color:var(--fg3);letter-spacing:0.1em;text-transform:uppercase}
+
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-top:3rem}
+.skill-cat{background:var(--bg);padding:1.75rem;transition:background 0.2s}
+.skill-cat:hover{background:var(--bg3)}
+.skill-cat-name{font-family:var(--mono);font-size:0.65rem;color:var(--accent2);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem}
+.skill-tags{display:flex;flex-wrap:wrap;gap:0.4rem}
+.tag{font-size:0.75rem;color:var(--fg2);background:var(--bg3);padding:0.25rem 0.6rem;border:1px solid var(--border);letter-spacing:0.02em;transition:all 0.2s}
+.tag:hover,.tag.highlight{border-color:var(--accent2);color:var(--accent);background:rgba(196,169,106,0.05)}
+
+.projects-list{margin-top:3rem;display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border)}
+.project{background:var(--bg);padding:2.5rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;transition:background 0.25s;cursor:default;position:relative;overflow:hidden}
+.project::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent2);transition:width 0.3s;opacity:0.15}
+.project:hover{background:var(--bg2)}
+.project:hover::before{width:3px}
+.project-type{font-family:var(--mono);font-size:0.65rem;color:var(--fg3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.75rem}
+.project-name{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.03em;margin-bottom:0.75rem;color:var(--fg)}
+.project-desc{color:var(--fg2);font-size:0.9rem;line-height:1.7;max-width:560px}
+.project-stack{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1.25rem}
+.project-link{display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.7rem;color:var(--accent2);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--border);padding:0.6rem 1rem;transition:all 0.2s;white-space:nowrap;align-self:start;margin-top:0.5rem}
+.project-link:hover{border-color:var(--accent2);color:var(--accent);background:rgba(196,169,106,0.05)}
+.project-link svg{width:12px;height:12px;transition:transform 0.2s}
+.project-link:hover svg{transform:translate(2px,-2px)}
+
+.exp-list{margin-top:3rem;position:relative}
+.exp-line{position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--border)}
+.exp-item{padding-left:2.5rem;padding-bottom:3rem;position:relative}
+.exp-item::before{content:'';position:absolute;left:-4px;top:6px;width:9px;height:9px;border:1px solid var(--accent2);background:var(--bg);rotate:45deg;transition:background 0.2s}
+.exp-item:hover::before{background:var(--accent2)}
+.exp-period{font-family:var(--mono);font-size:0.68rem;color:var(--fg3);letter-spacing:0.12em;margin-bottom:0.5rem}
+.exp-role{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.03em;color:var(--fg);line-height:1.1;margin-bottom:0.25rem}
+.exp-company{font-size:0.85rem;color:var(--accent2);margin-bottom:1rem;font-weight:400}
+.exp-bullets{list-style:none;display:flex;flex-direction:column;gap:0.5rem}
+.exp-bullets li{font-size:0.88rem;color:var(--fg2);padding-left:1rem;position:relative;line-height:1.6}
+.exp-bullets li::before{content:'—';position:absolute;left:0;color:var(--fg3)}
+
+.contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+.contact-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,6rem);line-height:0.95;letter-spacing:0.02em}
+.contact-big span{color:var(--accent2)}
+.contact-links{display:flex;flex-direction:column;gap:1rem}
+.contact-link{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border:1px solid var(--border);text-decoration:none;color:var(--fg2);font-size:0.85rem;transition:all 0.25s;group:true}
+.contact-link:hover{border-color:var(--accent2);color:var(--fg);background:rgba(196,169,106,0.04);padding-left:2rem}
+.contact-link-label{font-family:var(--mono);font-size:0.65rem;color:var(--fg3);letter-spacing:0.12em;text-transform:uppercase;display:block;margin-bottom:0.2rem}
+.contact-link svg{opacity:0.4;transition:opacity 0.2s,transform 0.2s}
+.contact-link:hover svg{opacity:1;transform:translate(3px,-3px)}
+
+footer{padding:2rem 4rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.footer-copy{font-family:var(--mono);font-size:0.65rem;color:var(--fg3);letter-spacing:0.1em}
+
+.available-badge{display:inline-flex;align-items:center;gap:0.5rem;font-family:var(--mono);font-size:0.65rem;color:var(--green);letter-spacing:0.12em;text-transform:uppercase;border:1px solid rgba(61,186,126,0.25);padding:0.4rem 0.8rem;margin-bottom:2rem;opacity:0;animation:fadeUp 0.8s 0s forwards}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scrollPulse{0%,100%{opacity:0.3;transform:scaleY(0.6)}50%{opacity:1;transform:scaleY(1)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(61,186,126,0.5)}50%{box-shadow:0 0 0 5px transparent}}
+
+.reveal{opacity:0;transform:translateY(32px);transition:opacity 0.7s,transform 0.7s}
+.reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav id="nav">
+  <a href="#" class="nav-logo">AS</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="available-badge"><span class="dot"></span> Available for opportunities</div>
+  <div class="hero-eyebrow">Frontend Engineer · CMS Specialist</div>
+  <h1 class="hero-name">Arjun<br><span>Singh</span></h1>
+  <p class="hero-sub">I build enterprise-grade, content-driven web experiences using Next.js, React, and headless CMS platforms — from Sitecore to Contentful.</p>
+  <div class="hero-cta">
+    <a href="#work" class="btn btn-primary">View my work</a>
+    <a href="#contact" class="btn btn-outline">Get in touch</a>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="reveal about">
+    <div>
+      <div class="section-label">01 — About</div>
+      <h2 class="section-title">Building the<br>web's content<br>layer</h2>
+    </div>
+    <div class="about-text">
+      <p>Frontend engineer with <strong>2+ years</strong> of experience delivering performant, SEO-optimised digital experiences for enterprise clients across consulting, health, and engineering sectors.</p>
+      <p>My niche sits at the intersection of <strong>modern frontend (Next.js, React, TypeScript)</strong> and <strong>headless CMS architecture</strong> — helping teams decouple their content from their presentation layer and move faster.</p>
+      <p>Currently freelancing and expanding into full-stack with Java Spring Boot and DevOps. Based in India, open to remote or relocation.</p>
+      <div class="stats" style="margin-top:2.5rem">
+        <div class="stat"><span class="stat-num">2+</span><span class="stat-label">Years Experience</span></div>
+        <div class="stat"><span class="stat-num">4</span><span class="stat-label">CMS Platforms</span></div>
+        <div class="stat"><span class="stat-num">6+</span><span class="stat-label">Client Projects</span></div>
+        <div class="stat"><span class="stat-num">30%</span><span class="stat-label">Load Time Reduction</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" style="padding-top:0">
+  <div class="reveal">
+    <div class="section-label">02 — Skills</div>
+    <h2 class="section-title">What I work with</h2>
+    <div class="skills-grid">
+      <div class="skill-cat">
+        <div class="skill-cat-name">CMS & Commerce</div>
+        <div class="skill-tags">
+          <span class="tag highlight">Sitecore</span>
+          <span class="tag highlight">OrderCloud</span>
+          <span class="tag highlight">Contentful</span>
+          <span class="tag highlight">Sanity</span>
+          <span class="tag">Strapi</span>
+          <span class="tag">Headless CMS</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <div class="skill-cat-name">Frontend</div>
+        <div class="skill-tags">
+          <span class="tag highlight">Next.js</span>
+          <span class="tag highlight">React</span>
+          <span class="tag highlight">TypeScript</span>
+          <span class="tag">Redux</span>
+          <span class="tag">Tailwind CSS</span>
+          <span class="tag">MobX</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <div class="skill-cat-name">Backend & Data</div>
+        <div class="skill-tags">
+          <span class="tag">Node.js</span>
+          <span class="tag">Express.js</span>
+          <span class="tag">Supabase</span>
+          <span class="tag">REST APIs</span>
+          <span class="tag">Spring Boot</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <div class="skill-cat-name">Cloud & DevOps</div>
+        <div class="skill-tags">
+          <span class="tag">Vercel</span>
+          <span class="tag">AWS EC2</span>
+          <span class="tag">AWS S3</span>
+          <span class="tag">Git</span>
+          <span class="tag">GitHub</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work" style="padding-top:2rem">
+  <div class="reveal">
+    <div class="section-label">03 — Work</div>
+    <h2 class="section-title">Selected projects</h2>
+    <div class="projects-list">
+
+      <div class="project">
+        <div>
+          <div class="project-type">Full-Stack · Personal Project</div>
+          <div class="project-name">PGSinKokrajhar</div>
+          <p class="project-desc">A full-stack PG accommodation booking platform featuring real-time availability, listing management, and role-based user authentication. Built end-to-end as a solo project.</p>
+          <div class="project-stack">
+            <span class="tag highlight">Next.js</span>
+            <span class="tag highlight">Sanity CMS</span>
+            <span class="tag">Supabase</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">Tailwind</span>
+          </div>
+        </div>
+        <a href="https://pginkokrajhar.com" target="_blank" class="project-link">
+          Live site
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+        </a>
+      </div>
+
+      <div class="project">
+        <div>
+          <div class="project-type">Sanity CMS · Freelance</div>
+          <div class="project-name">HorizonVision Group</div>
+          <p class="project-desc">Landing page for a video production agency, built with Sanity CMS for structured, editor-friendly content management. Enables the client to update marketing copy without touching code.</p>
+          <div class="project-stack">
+            <span class="tag highlight">Sanity CMS</span>
+            <span class="tag">Next.js</span>
+            <span class="tag">Tailwind CSS</span>
+          </div>
+        </div>
+        <a href="https://horizonvisiongroup.com" target="_blank" class="project-link">
+          Live site
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+        </a>
+      </div>
+
+      <div class="project">
+        <div>
+          <div class="project-type">Sitecore CMS · Enterprise</div>
+          <div class="project-name">FTI Consulting</div>
+          <p class="project-desc">Enterprise platform for a global consulting firm. Developed dynamic frontend components integrated with Sitecore CMS, enabling editors to manage rich content at scale.</p>
+          <div class="project-stack">
+            <span class="tag highlight">Sitecore</span>
+            <span class="tag">Next.js</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">REST APIs</span>
+          </div>
+        </div>
+        <a href="https://fticonsulting.com" target="_blank" class="project-link">
+          View site
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+        </a>
+      </div>
+
+      <div class="project">
+        <div>
+          <div class="project-type">Contentful · Enterprise</div>
+          <div class="project-name">Kohler Health</div>
+          <p class="project-desc">Responsive frontend for a premium health brand, using Contentful CMS for dynamic content rendering and structured content modeling with a strong focus on SEO performance.</p>
+          <div class="project-stack">
+            <span class="tag highlight">Contentful</span>
+            <span class="tag">Next.js</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">SSR/ISR</span>
+          </div>
+        </div>
+        <a href="https://kohlerhealth.com" target="_blank" class="project-link">
+          View site
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="experience" style="padding-top:2rem">
+  <div class="reveal">
+    <div class="section-label">04 — Experience</div>
+    <h2 class="section-title">Where I've worked</h2>
+    <div class="exp-list">
+      <div class="exp-line"></div>
+
+      <div class="exp-item">
+        <div class="exp-period">Jan 2026 — Present</div>
+        <div class="exp-role">Freelance Frontend Engineer</div>
+        <div class="exp-company">Self-Employed · Remote</div>
+        <ul class="exp-bullets">
+          <li>Delivering client projects end-to-end — from requirements through to deployment</li>
+          <li>Built PGSinKokrajhar (Next.js + Sanity + Supabase) and HorizonVision Group (Sanity CMS)</li>
+          <li>Upskilling in Java, Spring Boot, and DevOps via Coding Ninjas</li>
+        </ul>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-period">Aug 2025 — Dec 2025</div>
+        <div class="exp-role">Software Engineer</div>
+        <div class="exp-company">Koru UX Design · JSCAPE MFT SaaS</div>
+        <ul class="exp-bullets">
+          <li>Led frontend modernisation with React, Next.js, and Sitecore CMS</li>
+          <li>Redesigned 20+ enterprise screens, improving task efficiency by 25%</li>
+          <li>Integrated REST APIs for data-driven and CMS-driven workflows</li>
+        </ul>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-period">Mar 2024 — Aug 2025</div>
+        <div class="exp-role">Software Engineer</div>
+        <div class="exp-company">Incero.ai</div>
+        <ul class="exp-bullets">
+          <li>Built scalable frontend apps with Next.js, React, and TypeScript for enterprise CMS platforms</li>
+          <li>Integrated Sitecore, Contentful, Sanity, and Strapi for dynamic content delivery</li>
+          <li>Developed composable commerce solutions with Sitecore OrderCloud</li>
+          <li>Reduced page load time by 30% using SSR/ISR and code splitting</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="reveal contact-inner">
+    <div>
+      <div class="section-label">05 — Contact</div>
+      <h2 class="contact-big">Let's build<br>something<br><span>great.</span></h2>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:arjun40779@gmail.com" class="contact-link">
+        <div>
+          <span class="contact-link-label">Email</span>
+          arjun40779@gmail.com
+        </div>
+        <svg width="16" height="16" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+      </a>
+      <a href="https://linkedin.com/in/arjun-singh-541554117" target="_blank" class="contact-link">
+        <div>
+          <span class="contact-link-label">LinkedIn</span>
+          arjun-singh-541554117
+        </div>
+        <svg width="16" height="16" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+      </a>
+      <a href="https://github.com/arjun40779" target="_blank" class="contact-link">
+        <div>
+          <span class="contact-link-label">GitHub</span>
+          github.com/arjun40779
+        </div>
+        <svg width="16" height="16" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+      </a>
+      <a href="tel:+917576068348" class="contact-link">
+        <div>
+          <span class="contact-link-label">Phone</span>
+          +91 75760 68348
+        </div>
+        <svg width="16" height="16" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">© 2026 Arjun Singh</span>
+  <span class="footer-copy">Frontend Engineer · Next.js · Headless CMS</span>
+</footer>
+
+<script>
+const cursor=document.getElementById('cursor'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.width='6px';cursor.style.height='6px';ring.style.width='50px';ring.style.height='50px'});
+  el.addEventListener('mouseleave',()=>{cursor.style.width='10px';cursor.style.height='10px';ring.style.width='36px';ring.style.height='36px'});
+});
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',scrollY>60);
+});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
